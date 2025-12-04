@@ -97,7 +97,7 @@
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 2rem;
             color: #4facfe;
             text-shadow: 0 0 10px #00f260;
             margin-bottom: 10px;
@@ -141,17 +141,26 @@
             margin-bottom: 10px;
         }
 
-        .corner-display {
+        /* --- NEW STATS CONTAINER (Top Left) --- */
+        .top-left-stats {
             position: absolute;
             top: 20px;
             left: 20px;
+            z-index: 110;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            /* Jarak antara koin dan badge */
+        }
+
+        /* Update: corner-display now relative inside container */
+        .corner-display {
             background: rgba(0, 0, 0, 0.5);
             border: 1px solid #ffd700;
             color: #ffd700;
             padding: 8px 15px;
             border-radius: 20px;
             font-size: 1.1rem;
-            z-index: 110;
             display: flex;
             align-items: center;
             gap: 5px;
@@ -189,9 +198,10 @@
         #memory-modal,
         #battle-modal,
         #pause-menu,
-        #promo-modal,
         #game-2048-modal,
-        #drop-modal {
+        #drop-modal,
+        #vip-modal,
+        #promo-modal {
             position: absolute;
             top: 0;
             left: 0;
@@ -479,11 +489,12 @@
             }
         }
 
-        /* PROMO & VIP STYLES */
+        /* PROMO & VIP STYLES (NEW) */
         #promo-trigger {
             position: absolute;
-            top: 70px;
+            top: 80px;
             left: 20px;
+            /* Turunin posisi promo supaya gak numpuk */
             width: 50px;
             height: 50px;
             background: linear-gradient(135deg, #ffd700, #ff8c00);
@@ -517,9 +528,7 @@
         }
 
         #vip-badge {
-            position: absolute;
-            top: 70px;
-            left: 20px;
+            /* Relative karena sekarang di dalam flex container */
             background: linear-gradient(90deg, #ffd700, #ffecb3);
             color: #5a3a00;
             padding: 5px 10px;
@@ -529,8 +538,194 @@
             font-weight: bold;
             border: 2px solid #fff;
             display: none;
-            z-index: 110;
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        #vip-badge:active {
+            transform: scale(0.95);
+        }
+
+        #promo-modal,
+        #vip-modal {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .promo-content {
+            background: linear-gradient(145deg, #1a1a2e, #16213e);
+            border: 2px solid #ffd700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            animation: scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .promo-title {
+            color: #ffd700;
+            font-family: 'VT323';
+            font-size: 2.8rem;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 0px #000;
+            letter-spacing: 2px;
+        }
+
+        .promo-icon {
+            font-size: 5rem;
+            margin: 10px 0;
+            filter: drop-shadow(0 0 15px rgba(0, 242, 96, 0.6));
+            animation: floatDiamond 3s ease-in-out infinite;
+        }
+
+        .promo-desc {
+            font-family: 'Nunito', sans-serif;
+            font-size: 1rem;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .price-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-family: 'VT323';
+            font-size: 1.8rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .promo-price {
+            text-decoration: line-through;
+            color: #ff4b4b;
+            opacity: 0.8;
+            font-size: 1.5rem;
+        }
+
+        .promo-free {
+            color: #00f260;
+            font-weight: bold;
+            font-size: 2rem;
+            text-shadow: 0 0 10px #00f260;
+            animation: pulseText 1.5s infinite;
+        }
+
+        .btn-claim {
+            background: linear-gradient(90deg, #00f260, #05c46b);
+            color: #000;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 242, 96, 0.4);
+            border-radius: 10px;
+            font-family: 'VT323';
+            cursor: pointer;
+        }
+
+        .btn-claim:active {
+            transform: scale(0.95);
+        }
+
+        .btn-later {
+            background: transparent;
+            border: none;
+            color: #aaa;
+            margin-top: 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: underline;
+            font-family: 'Nunito';
+        }
+
+        /* VIP Benefits List Styles */
+        .vip-list {
+            text-align: left;
+            margin-bottom: 20px;
+            font-family: 'Nunito';
+            font-size: 1rem;
+            color: #fff;
+            padding-left: 20px;
+        }
+
+        .vip-list li {
+            margin-bottom: 8px;
+            list-style: none;
+            position: relative;
+        }
+
+        .vip-list li::before {
+            content: "✨ ";
+            position: absolute;
+            left: -25px;
+        }
+
+        @keyframes floatDiamond {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px) scale(1.1);
+            }
+        }
+
+        @keyframes pulseText {
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes scaleUp {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         /* --- 2048 STYLES --- */
@@ -686,8 +881,8 @@
 
     <div id="game-box">
         <div id="main-menu">
-            <h1>STAR JOURNEY</h1>
-            <p class="subtitle">Bantu Astronot mengumpulkan sinyal memori.</p>
+            <h1>🤍FRANSISKA JOURNEY🤍</h1>
+            <p class="subtitle">Ayo Ikaa kumpulkan sinyal memori.</p>
             <button class="btn" onclick="startGame()">🚀 Mulai Misi</button>
             <div class="menu-row">
                 <button class="btn" style="width: auto;" onclick="openMining()">⛏️ Tambang</button>
@@ -704,10 +899,12 @@
             <button class="btn" style="width: auto; font-size: 1rem; margin-top: 5px;"
                 onclick="showAbout()">Tentang</button>
 
-            <div class="corner-display">🪙 <span id="coin-display">0</span></div>
+            <div class="top-left-stats">
+                <div class="corner-display">🪙 <span id="coin-display">0</span></div>
+                <div id="vip-badge" onclick="showVipBenefits()">👑 VIP MEMBER</div>
+            </div>
 
             <div id="promo-trigger" onclick="openPromo()">🎁</div>
-            <div id="vip-badge">👑 VIP MEMBER</div>
         </div>
 
         <button id="pause-btn" onclick="togglePause()">⏸️</button>
@@ -747,7 +944,7 @@
             <div class="score-box-2048" style="border-color:#e91e63; background: #3a1b29;">Skor: <span
                     id="score-drop">0</span></div>
             <canvas id="drop-canvas" width="320" height="400"></canvas>
-            <div class="controls-hint">Klik/Tap untuk menjatuhkan.<br>Awas batas atas!</div>
+            <div class="controls-hint">Tap/Klik di mana saja untuk menjatuhkan!<br>Awas batas atas!</div>
             <button class="close-btn" onclick="closeDrop()">Kembali</button>
         </div>
 
@@ -785,21 +982,42 @@
 
         <div id="promo-modal">
             <div class="promo-content">
-                <h2 style="color: #ffd700; font-family: 'VT323'; font-size: 2.5rem; margin-bottom: 10px;">SPECIAL OFFER!
-                </h2>
-                <div style="font-size: 4rem; margin-bottom: 10px;">💎</div>
-                <p style="font-family: 'Nunito'; margin-bottom: 20px;">Dapatkan <b>10.000 Koin</b> Langsung!</p>
-                <p style="font-family: 'Nunito'; font-size: 0.9rem; color: #ccc; margin-bottom: 20px;">
-                    <i>"Beri kesempatan pada Darius dan dapatkan 10.000 koin langsung."</i>
+                <h2 class="promo-title">SPECIAL OFFER!</h2>
+
+                <div class="promo-icon">💎</div>
+
+                <p style="font-family: 'Nunito'; margin-bottom: 10px; font-size: 1.1rem;">
+                    Dapatkan <b>10.000 Koin</b> Langsung!
                 </p>
-                <div style="margin-bottom: 20px; font-family: 'VT323'; font-size: 1.5rem;">
-                    <span class="promo-price">Rp 99.000</span> <span class="promo-free">GRATIS</span>
+
+                <p class="promo-desc">
+                    <i>"Kesempatan langka untuk Darius! Jangan lewatkan bonus ini."</i>
+                </p>
+
+                <div class="price-box">
+                    <span class="promo-price">Rp 99.000</span>
+                    <span class="promo-free">GRATIS</span>
                 </div>
-                <button class="btn" style="background: #00f260; color: #000; border: none; width: 100%;"
-                    onclick="claimPromo()">AMBIL SEKARANG</button>
-                <button class="close-btn"
-                    style="background: transparent; border: 1px solid #aaa; color: #aaa; margin-top: 10px;"
-                    onclick="closePromo()">Nanti Saja</button>
+
+                <button class="btn-claim" onclick="claimPromo()">AMBIL SEKARANG 🚀</button>
+                <button class="btn-later" onclick="closePromo()">Nanti Saja</button>
+            </div>
+        </div>
+
+        <div id="vip-modal">
+            <div class="promo-content" style="border-color: #ffd700;">
+                <h2 class="promo-title">VIP BENEFITS</h2>
+                <div class="promo-icon">👑</div>
+
+                <ul class="vip-list">
+                    <li><b>Skin Eksklusif:</b> Golden Astro 🟡 (Gratis!)</li>
+                    <li><b>Bonus Koin:</b> +10.000 Koin Awal</li>
+                    <li><b>Status:</b> Badge VIP Keren</li>
+                    <li><b>Status:</b> lope lope dari Darius ❤️</li>
+                    <li><b>Support:</b>🤍 Terima Kasih Ikaa 🤍</li>
+                </ul>
+
+                <button class="btn-claim" onclick="closeVipBenefits()">   Yipiii</button>
             </div>
         </div>
 
@@ -822,7 +1040,10 @@
             win: new Audio('https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c153e1.mp3'),
             card: new Audio('https://cdn.pixabay.com/download/audio/2022/03/24/audio_8340d2d323.mp3'),
             notif: new Audio('https://cdn.pixabay.com/download/audio/2021/08/04/audio_c6ccf3232f.mp3'),
-            pop: new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73467.mp3') // reused jump for pop
+            pop: new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a73467.mp3'), // reused jump for pop
+            star: new Audio('https://cdn.pixabay.com/download/audio/2021/08/09/audio_03e647c0f2.mp3'), // Collect Star
+            powerup: new Audio('https://cdn.pixabay.com/download/audio/2022/03/19/audio_97063d3329.mp3'), // Fun Item
+            heal: new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_736862b624.mp3') // Heal
         };
 
         sounds.bgm.loop = true;
@@ -853,6 +1074,7 @@
         const memoryModal = document.getElementById('memory-modal');
         const battleModal = document.getElementById('battle-modal');
         const promoModal = document.getElementById('promo-modal');
+        const vipModal = document.getElementById('vip-modal');
         const modal2048 = document.getElementById('game-2048-modal');
         const modalDrop = document.getElementById('drop-modal');
 
@@ -878,7 +1100,8 @@
             { id: 'skin_1', name: 'Super Astro', emoji: '🦸', price: 50 },
             { id: 'skin_2', name: 'Mecha Bot', emoji: '🤖', price: 150 },
             { id: 'skin_3', name: 'Alien', emoji: '👽', price: 300 },
-            { id: 'skin_4', name: 'Pixel Void', emoji: '👾', price: 500 }
+            { id: 'skin_4', name: 'Pixel Void', emoji: '👾', price: 500 },
+            { id: 'skin_vip', name: 'Golden Astro', emoji: '🟡', price: 99999, vipOnly: true } // New VIP Skin
         ];
         const weapons = [
             { id: 'wep_0', name: 'Laser Gun', emoji: '🔫', dmg: 15, price: 0 },
@@ -901,6 +1124,11 @@
             if (isVip) {
                 promoTrigger.style.display = 'none';
                 vipBadge.style.display = 'block';
+                // Unlock VIP skin if not already
+                if (!unlockedSkins.includes('skin_vip')) {
+                    unlockedSkins.push('skin_vip');
+                    localStorage.setItem('unlockedSkins', JSON.stringify(unlockedSkins));
+                }
             } else {
                 promoTrigger.style.display = 'flex';
                 vipBadge.style.display = 'none';
@@ -924,6 +1152,9 @@
         function openPromo() { playSound('click'); promoModal.style.display = 'flex'; }
         function closePromo() { playSound('click'); promoModal.style.display = 'none'; }
 
+        function showVipBenefits() { playSound('click'); vipModal.style.display = 'flex'; }
+        function closeVipBenefits() { playSound('click'); vipModal.style.display = 'none'; }
+
         function claimPromo() {
             playSound('win');
             moonCoins += 10000;
@@ -936,7 +1167,7 @@
 
             Swal.fire({
                 title: 'VIP AKTIF! 👑',
-                text: 'Terima kasih atas kesempatannya. 10.000 Koin telah ditambahkan!',
+                text: 'Terima kasih atas kesempatannya. 10.000 Koin & Skin Golden Astro telah ditambahkan!',
                 icon: 'success',
                 background: '#1a1a2e', color: '#fff', confirmButtonColor: '#ffd700'
             });
@@ -1057,10 +1288,30 @@
             playSound('click'); modalDrop.style.display = 'flex';
             dropCanvas = document.getElementById('drop-canvas'); dropCtx = dropCanvas.getContext('2d');
             resetDropGame();
-            dropCanvas.addEventListener('mousemove', (e) => { dropMouseX = e.clientX - dropCanvas.getBoundingClientRect().left; });
-            dropCanvas.addEventListener('click', dropTheBall);
-            dropCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); dropMouseX = e.touches[0].clientX - dropCanvas.getBoundingClientRect().left; }, { passive: false });
-            dropCanvas.addEventListener('touchend', dropTheBall);
+
+            // Event Listeners for "Tap to Drop"
+            const updatePos = (e) => {
+                const rect = dropCanvas.getBoundingClientRect();
+                let clientX;
+                if (e.touches && e.touches.length > 0) clientX = e.touches[0].clientX;
+                else if (e.changedTouches && e.changedTouches.length > 0) clientX = e.changedTouches[0].clientX;
+                else clientX = e.clientX;
+                dropMouseX = clientX - rect.left;
+            };
+
+            // Visual Aiming
+            dropCanvas.addEventListener('mousemove', (e) => { updatePos(e); });
+            dropCanvas.addEventListener('touchmove', (e) => { e.preventDefault(); updatePos(e); }, { passive: false });
+
+            // Action: Update Pos & Drop
+            const handleTap = (e) => {
+                e.preventDefault();
+                updatePos(e);
+                dropTheBall();
+            };
+
+            dropCanvas.addEventListener('mousedown', handleTap);
+            dropCanvas.addEventListener('touchstart', handleTap, { passive: false });
         }
 
         function closeDrop() { playSound('click'); modalDrop.style.display = 'none'; clearInterval(dropGameLoop); }
@@ -1068,7 +1319,7 @@
         function getNextBallType() {
             let r = Math.random();
             if (r > 0.999) return 2; // 0.1% Chance Size 3
-            else if (r > 0.30) return 0; // ~60% Chance Size 1
+            else if (r > 0.40) return 0; // ~60% Chance Size 1
             else return 1; // ~39.9% Chance Size 2
         }
 
@@ -1091,7 +1342,7 @@
             canDrop = false; // Start Cooldown
             dropNextBallType = getNextBallType();
 
-            setTimeout(() => { canDrop = true; }, 800); // 1 Second Delay
+            setTimeout(() => { canDrop = true; }, 1000); // 1 Second Delay
         }
 
         function updateDropGame() {
@@ -1237,7 +1488,7 @@
             if (enemyHp === 0) { winBattle(); } else { document.getElementById('atk-btn').disabled = true; setTimeout(alienTurn, 1000); }
         }
         function playerHeal() {
-            playSound('notif'); const heal = 30; heroHp += heal; if (heroHp > maxHp) heroHp = maxHp; updateHpUI();
+            playSound('heal'); const heal = 30; heroHp += heal; if (heroHp > maxHp) heroHp = maxHp; updateHpUI();
             document.getElementById('battle-log').innerText = `Kamu healing +${heal} HP`;
             document.getElementById('atk-btn').disabled = true; setTimeout(alienTurn, 1000);
         }
@@ -1273,7 +1524,11 @@
             let isUnlocked, isEquipped;
             if (type === 'skin') { isUnlocked = unlockedSkins.includes(item.id); isEquipped = currentSkin === item.id; }
             else { isUnlocked = unlockedWeapons.includes(item.id); isEquipped = currentWeapon === item.id; }
-            let btnHtml = isEquipped ? `<button class="shop-btn btn-equipped">Terpakai</button>` : isUnlocked ? `<button class="shop-btn btn-equip" onclick="equipItem('${item.id}', '${type}')">Pakai</button>` : `<button class="shop-btn btn-buy" onclick="buyItem('${item.id}', ${item.price}, '${type}')">Beli (${item.price})</button>`;
+            let btnHtml;
+            if (item.vipOnly && !isVip) btnHtml = `<button class="shop-btn" style="background:#ff4b4b; cursor:not-allowed;" disabled>VIP ONLY</button>`;
+            else if (isEquipped) btnHtml = `<button class="shop-btn btn-equipped">Terpakai</button>`;
+            else if (isUnlocked) btnHtml = `<button class="shop-btn btn-equip" onclick="equipItem('${item.id}', '${type}')">Pakai</button>`;
+            else btnHtml = `<button class="shop-btn btn-buy" onclick="buyItem('${item.id}', ${item.price}, '${type}')">Beli (${item.price})</button>`;
             div.innerHTML = `<div class="shop-emoji">${item.emoji}</div><div style="font-size:0.9rem; margin-bottom:5px;">${item.name}</div>${type === 'weapon' ? `<div style="font-size:0.7rem; color:#ff4b4b">DMG: ${item.dmg}</div>` : ''}${btnHtml}`;
             shopContainer.appendChild(div);
         }
@@ -1292,7 +1547,7 @@
             else { currentWeapon = id; localStorage.setItem('currentWeapon', currentWeapon); updateBattleButton(); }
             renderShop();
         }
-        function showAbout() { playSound('click'); Swal.fire({ title: 'Info', text: 'Game Khusus Fransiska Tjoe', background: '#0b0d17', color: '#fff', confirmButtonColor: '#4facfe' }); }
+        function showAbout() { playSound('click'); Swal.fire({ title: 'Info', text: 'Game Khusus untuk Fransiska Tjoe', background: '#0b0d17', color: '#fff', confirmButtonColor: '#4facfe' }); }
 
         // --- MAIN GAME LOOP ---
         function startGame() {
@@ -1321,7 +1576,7 @@
         function jump() { if (isGameRunning && !isPaused) { playSound('jump'); velocity = -6; } }
         document.body.addEventListener('mousedown', jump);
         document.body.addEventListener('touchstart', (e) => {
-            if (e.target.closest('.btn') || e.target.closest('.shop-btn') || e.target.closest('.battle-btn') || e.target.closest('.close-btn') || e.target.closest('#mining-modal') || e.target.closest('#shop-modal') || e.target.closest('#memory-modal') || e.target.closest('#battle-modal') || e.target.closest('#pause-btn') || e.target.closest('#pause-menu') || e.target.closest('#promo-modal') || e.target.closest('#promo-trigger') || e.target.closest('#game-2048-modal') || e.target.closest('#drop-modal')) return;
+            if (e.target.closest('.btn') || e.target.closest('.shop-btn') || e.target.closest('.battle-btn') || e.target.closest('.close-btn') || e.target.closest('#mining-modal') || e.target.closest('#shop-modal') || e.target.closest('#memory-modal') || e.target.closest('#battle-modal') || e.target.closest('#pause-btn') || e.target.closest('#pause-menu') || e.target.closest('#promo-modal') || e.target.closest('#promo-trigger') || e.target.closest('#game-2048-modal') || e.target.closest('#drop-modal') || e.target.closest('#vip-modal')) return;
             e.preventDefault(); jump();
         });
         document.body.addEventListener('keydown', (e) => { if (e.code === 'Space' || e.code === 'ArrowUp') jump(); });
@@ -1347,12 +1602,12 @@
             }
         }
         function collectFunItem(el) {
-            playSound('coin'); const msg = el.getAttribute('data-msg'); el.remove(); score += 5; moonCoins += 10; scoreEl.innerText = score; updateCoinDisplay();
+            playSound('powerup'); const msg = el.getAttribute('data-msg'); el.remove(); score += 5; moonCoins += 10; scoreEl.innerText = score; updateCoinDisplay();
             showFloatingText(msg + " (+10🪙)", '#ffeb3b'); astronaut.classList.add('spin-anim'); setTimeout(() => astronaut.classList.remove('spin-anim'), 600);
             if (score >= 100 && !hasShownLetter) showLetter();
         }
         function collectStar(starEl) {
-            playSound('coin'); starEl.remove(); score += 20; moonCoins += 2; scoreEl.innerText = score; updateCoinDisplay();
+            playSound('star'); starEl.remove(); score += 20; moonCoins += 2; scoreEl.innerText = score; updateCoinDisplay();
             let txt = "🤍"; if (msgIndex < messages.length) { txt = messages[msgIndex]; msgIndex++; }
             showFloatingText(txt + " (+2🪙)", '#fff'); if (score >= 100 && !hasShownLetter) showLetter();
         }
@@ -1369,7 +1624,7 @@
         }
         function showLetter() {
             playSound('notif'); isPaused = true; hasShownLetter = true;
-            const finalMessage = `<div class="final-letter"><b>Untuk Ika,</b><br><br>Aku cuma mau bilang satu hal: Maaf. <br>Maaf buat semua sikapku yang dulu bikin kamu kecewa. Aku sadar, dulu aku banyak kurangnya, kurang peka, dan nggak menghargai apa yang ada.<br><br>Penyesalan ini mungkin telat, tapi ini jujur dari hati. Aku nggak minta apa-apa selain kamu tau kalau aku beneran nyesel pernah bikin kamu sedih.<br><br>Aku selalu mengharapkan kebahagiaan kamu. i love you, always do✨</div>`;
+            const finalMessage = `<div class="final-letter"><b>Untuk Ika,</b><br><br>Aku cuma mau bilang satu hal: Maaf. <br>Maaf buat semua sikapku yang dulu bikin kamu kecewa. Aku sadar, dulu aku banyak kurangnya, kurang peka, dan nggak menghargai apa yang ada.<br><br>Penyesalan ini mungkin telat, tapi ini jujur dari hati. Aku nggak minta apa-apa selain kamu tau kalau aku beneran nyesel pernah bikin kamu sedih.<br><br>Aku selalu mengharapkan kebahagiaan kamu. I love you, always do✨</div>`;
             Swal.fire({ title: 'Pesan Masuk 📩', html: finalMessage, background: '#fff', color: '#333', width: 600, confirmButtonText: 'Lanjut Main 🚀', confirmButtonColor: '#4facfe', allowOutsideClick: false, backdrop: `rgba(0,0,30,0.8)` }).then(() => { isPaused = false; });
         }
         function gameOver() {
